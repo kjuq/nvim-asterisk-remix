@@ -126,17 +126,48 @@ local function visual_search(key)
 	end
 end
 
+M.maps = {
+	normal = {
+		["*"] = function()
+			normal_search("*")
+		end,
+		["#"] = function()
+			normal_search("#")
+		end,
+		["g*"] = function()
+			normal_search("g*")
+		end,
+		["g#"] = function()
+			normal_search("g#")
+		end,
+	},
+	visual = {
+		["*"] = function()
+			return visual_search("*")
+		end,
+		["#"] = function()
+			return visual_search("#")
+		end,
+	},
+	operator = {
+		["*"] = function()
+			return operator_search("*")
+		end,
+		["#"] = function()
+			return operator_search("#")
+		end,
+	},
+}
+
 function M.setup()
-	-- stylua: ignore start
-	vim.keymap.set('n', '*', function() normal_search('*') end)
-	vim.keymap.set('n', '#', function() normal_search('#') end)
-	vim.keymap.set('n', 'g*', function() normal_search('g*') end)
-	vim.keymap.set('n', 'g#', function() normal_search('g#') end)
-	vim.keymap.set('x', '*', function() return visual_search('*') end, { expr = true })
-	vim.keymap.set('x', '#', function() return visual_search('#') end, { expr = true })
-	vim.keymap.set('n', '<Space>*', function() return operator_search('*') end, { expr = true })
-	vim.keymap.set('n', '<Space>#', function() return operator_search('#') end, { expr = true })
-	-- stylua: ignore end
+	vim.keymap.set("n", "*", M.maps.normal["*"])
+	vim.keymap.set("n", "#", M.maps.normal["#"])
+	vim.keymap.set("n", "g*", M.maps.normal["g*"])
+	vim.keymap.set("n", "g#", M.maps.normal["g#"])
+	vim.keymap.set("x", "*", M.maps.visual["*"], { expr = true })
+	vim.keymap.set("x", "#", M.maps.visual["#"], { expr = true })
+	vim.keymap.set("n", "<Space>*", M.maps.operator["*"], { expr = true })
+	vim.keymap.set("n", "<Space>#", M.maps.operator["#"], { expr = true })
 end
 
 return M
